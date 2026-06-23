@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FinanIA - Análise financeira inteligente com IA para famílias">
+  <meta name="keywords" content="finanças, educação financeira, IA, NVIDIA, análise financeira, planejamento financeiro">
+  <meta name="author" content="FinanIA">
+  <meta name="theme-color" content="#020617">
+  <meta property="og:title" content="FinanIA - Inteligência Financeira para Sua Família">
+  <meta property="og:description" content="Análise financeira baseada em IA para ajudar sua família a tomar melhores decisões">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💰</text></svg>">
+  <title>FinanIA - Inteligência Financeira para Sua Família</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/src/css/variables.css">
+  <link rel="stylesheet" href="/src/css/global.css">
+  <link rel="stylesheet" href="/src/css/components.css">
+  <link rel="stylesheet" href="/src/css/animations.css">
+</head>
+<body>
+  <!-- SVG Definitions -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+  </svg>
+  
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="hero-background">
+      <canvas id="particles"></canvas>
+    </div>
+    
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span class="badge-icon">✨</span>
+        Powered by NVIDIA AI
+      </div>
+      
+      <h1 class="hero-title">
+        Descubra o Futuro Financeiro<br>
+        <span class="gradient-text">da Sua Família</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Uma análise inteligente baseada em IA para ajudar você<br>
+        a tomar melhores decisões financeiras
+      </p>
+      
+      <button class="btn-primary" id="startBtn">
+        Iniciar Diagnóstico
+        <span class="btn-icon">→</span>
+      </button>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Gratuito</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">2min</div>
+          <div class="stat-label">Análise Rápida</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">IA</div>
+          <div class="stat-label">Personalizado</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section id="formSection" class="section hidden">
+    <div class="container">
+      <div class="form-header">
+        <h2 class="section-title">Dados Financeiros da Família</h2>
+        <p class="section-subtitle">Preencha as informações abaixo para receber sua análise personalizada</p>
+      </div>
+      
+      <form id="financialForm" class="financial-form">
+        <div class="form-section-wrapper">
+          <!-- Renda -->
+          <div class="form-group-enhanced">
+            <label for="renda">
+              <span class="label-icon">💵</span>
+              Renda Mensal Familiar
+            </label>
+            <div class="quick-select">
+              <button type="button" class="quick-btn" data-target="renda" data-value="2000">Até 2k</button>
+              <button type="button" class="quick-btn" data-target="renda" data-value="3500">2k-5k</button>
+              <button type="button" class="quick-btn" data-target="renda" data-value="7500">5k-10k</button>
+              <button type="button" class="quick-btn" data-target="renda" data-value="12000">+10k</button>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="renda" name="renda" required min="0" step="0.01" placeholder="Ex: 5000">
+            </div>
+          </div>
+          
+          <!-- Gastos -->
+          <div class="form-group-enhanced">
+            <label for="gastos">
+              <span class="label-icon">🛍️</span>
+              Gastos Mensais Totais
+            </label>
+            <div class="quick-select">
+              <button type="button" class="quick-btn" data-target="gastos" data-value="1500">Até 2k</button>
+              <button type="button" class="quick-btn" data-target="gastos" data-value="3000">2k-4k</button>
+              <button type="button" class="quick-btn" data-target="gastos" data-value="6000">4k-8k</button>
+              <button type="button" class="quick-btn" data-target="gastos" data-value="9000">+8k</button>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="gastos" name="gastos" required min="0" step="0.01" placeholder="Ex: 3500">
+            </div>
+          </div>
+          
+          <!-- Reserva -->
+          <div class="form-group-enhanced">
+            <label for="reserva">
+              <span class="label-icon">🛡️</span>
+              Reserva de Emergência
+              <span class="label-hint">Dinheiro guardado para imprevistos</span>
+            </label>
+            <div class="quick-select">
+              <button type="button" class="quick-btn" data-target="reserva" data-value="0">Nenhuma</button>
+              <button type="button" class="quick-btn" data-target="reserva" data-value="2000">Até 5k</button>
+              <button type="button" class="quick-btn" data-target="reserva" data-value="10000">5k-20k</button>
+              <button type="button" class="quick-btn" data-target="reserva" data-value="30000">+20k</button>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="reserva" name="reserva" required min="0" step="0.01" placeholder="Ex: 10000">
+            </div>
+          </div>
+          
+          <!-- Dívidas -->
+          <div class="form-group-enhanced">
+            <label for="dividas">
+              <span class="label-icon">⚠️</span>
+              Dívidas Totais
+              <span class="label-hint">Cartões, empréstimos, financiamentos</span>
+            </label>
+            <div class="quick-select">
+              <button type="button" class="quick-btn" data-target="dividas" data-value="0">Sem dívidas</button>
+              <button type="button" class="quick-btn" data-target="dividas" data-value="3000">Até 5k</button>
+              <button type="button" class="quick-btn" data-target="dividas" data-value="8000">5k-10k</button>
+              <button type="button" class="quick-btn" data-target="dividas" data-value="15000">+10k</button>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input type="number" id="dividas" name="dividas" required min="0" step="0.01" placeholder="Ex: 5000">
+            </div>
+          </div>
+          
+          <!-- Dependentes -->
+          <div class="form-group-enhanced">
+            <label for="dependentes">
+              <span class="label-icon">👨‍👩‍👧‍👦</span>
+              Pessoas na Família
+              <span class="label-hint">Incluindo você</span>
+            </label>
+            <div class="quick-select">
+              <button type="button" class="quick-btn" data-target="dependentes" data-value="1">1</button>
+              <button type="button" class="quick-btn" data-target="dependentes" data-value="2">2</button>
+              <button type="button" class="quick-btn" data-target="dependentes" data-value="3">3</button>
+              <button type="button" class="quick-btn" data-target="dependentes" data-value="4">4</button>
+              <button type="button" class="quick-btn" data-target="dependentes" data-value="5">5+</button>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-prefix">👥</span>
+              <input type="number" id="dependentes" name="dependentes" min="1" value="2" placeholder="Ex: 3">
+            </div>
+          </div>
+          
+          <!-- Objetivos -->
+          <div class="form-group-enhanced full-width">
+            <label for="objetivos">
+              <span class="label-icon">🎯</span>
+              Objetivos Financeiros
+              <span class="label-hint">O que você quer alcançar? (opcional)</span>
+            </label>
+            <div class="quick-select-vertical">
+              <button type="button" class="quick-btn-text" data-target="objetivos" data-value="Comprar casa própria">🏠 Comprar casa</button>
+              <button type="button" class="quick-btn-text" data-target="objetivos" data-value="Sair das dívidas">💸 Quitar dívidas</button>
+              <button type="button" class="quick-btn-text" data-target="objetivos" data-value="Fazer uma viagem em família">✈️ Viajar</button>
+              <button type="button" class="quick-btn-text" data-target="objetivos" data-value="Guardar para aposentadoria">👴 Aposentadoria</button>
+              <button type="button" class="quick-btn-text" data-target="objetivos" data-value="Trocar de carro">🚗 Trocar carro</button>
+              <button type="button" class="quick-btn-text" data-target="objetivos" data-value="Educar os filhos">🎓 Educação</button>
+            </div>
+            <textarea id="objetivos" name="objetivos" rows="3" placeholder="Ex: Comprar casa própria, fazer uma viagem, guardar para emergências..."></textarea>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-primary btn-large">
+            <span id="btnText">
+              <span class="btn-icon-left">✨</span>
+              Gerar Análise Inteligente
+              <span class="btn-icon">→</span>
+            </span>
+            <span id="btnLoader" class="loader hidden"></span>
+          </button>
+          <p class="form-footer-text">
+            🔒 Seus dados são seguros e anônimos • ⏱️ Análise em 10 segundos
+          </p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Dashboard Section -->
+  <section id="dashboard" class="section hidden">
+    <div class="container">
+      <!-- Dashboard -->
+      <div class="dashboard-header">
+        <div>
+          <h2 class="section-title">Diagnóstico Financeiro</h2>
+          <p class="section-subtitle">Análise completa gerada por IA</p>
+        </div>
+        <button class="btn-secondary" id="newAnalysisBtn">
+          <span>🔄</span>
+          Nova Análise
+        </button>
+      </div>
+      
+      <!-- Score e Métricas em Grid -->
+      <div class="dashboard-grid">
+        <!-- Score Card -->
+        <div class="score-card-new">
+          <div class="score-header">
+            <h3>Score Financeiro</h3>
+            <div class="score-badge" id="scoreBadge">Calculando...</div>
+          </div>
+          <div class="score-gauge">
+            <svg viewBox="0 0 200 120">
+              <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke-width="12"/>
+              <path class="gauge-fill" id="gaugeFill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke-width="12"/>
+            </svg>
+            <div class="score-value" id="scoreValue">0</div>
+          </div>
+          <p class="score-description" id="scoreLabel">Analisando seus dados...</p>
+        </div>
+        
+        <!-- Metrics Cards -->
+        <div class="metrics-compact">
+          <div class="metric-card-compact positive">
+            <div class="metric-icon">💵</div>
+            <div class="metric-info">
+              <div class="metric-label">Saldo Mensal</div>
+              <div class="metric-value" id="metricSaldo">R$ 0</div>
+            </div>
+          </div>
+          
+          <div class="metric-card-compact">
+            <div class="metric-icon">🛡️</div>
+            <div class="metric-info">
+              <div class="metric-label">Reserva</div>
+              <div class="metric-value" id="metricReserva">0%</div>
+            </div>
+          </div>
+          
+          <div class="metric-card-compact warning">
+            <div class="metric-icon">⚠️</div>
+            <div class="metric-info">
+              <div class="metric-label">Dívidas</div>
+              <div class="metric-value" id="metricDivida">0%</div>
+            </div>
+          </div>
+          
+          <div class="metric-card-compact success">
+            <div class="metric-icon">📊</div>
+            <div class="metric-info">
+              <div class="metric-label">Economia</div>
+              <div class="metric-value" id="metricEconomia">0%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- AI Analysis -->
+      <div class="analysis-card">
+        <h3 class="card-title">
+          <span class="title-icon">🤖</span>
+          Análise da IA
+        </h3>
+        <div class="analysis-content" id="aiAnalysis">
+          <div class="skeleton-loader"></div>
+        </div>
+      </div>
+      
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h4>Distribuição Financeira</h4>
+          <canvas id="doughnutChart"></canvas>
+        </div>
+        
+        <div class="chart-card">
+          <h4>Saúde Financeira</h4>
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Section -->
+  <div id="chatWidget" class="chat-widget">
+    <button class="chat-toggle" id="chatToggle">
+      <span class="chat-icon">💬</span>
+      <span class="chat-badge">AI</span>
+    </button>
+    
+    <div class="chat-container hidden" id="chatContainer">
+      <div class="chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div class="chat-info">
+          <div class="chat-name">FinanIA</div>
+          <div class="chat-status">Online</div>
+        </div>
+        <button class="chat-close" id="chatClose">×</button>
+      </div>
+      
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">
+            Olá! Sou a FinanIA. Como posso ajudar com suas finanças hoje?
+          </div>
+        </div>
+      </div>
+      
+      <form class="chat-input" id="chatForm">
+        <input type="text" id="chatInput" placeholder="Digite sua pergunta..." autocomplete="off">
+        <button type="submit">
+          <span>→</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+  <script type="module" src="/src/js/main.js"></script>
+</body>
+</html>
