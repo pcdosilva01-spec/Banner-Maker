@@ -22,13 +22,7 @@ git add .
 
 echo.
 echo [2/3] Criando commit...
-set /p mensagem="Mensagem do commit: "
-
-if "%mensagem%"=="" (
-    set mensagem=Atualizacao FinanIA - Push Forcado
-)
-
-git commit -m "%mensagem%"
+git commit -m "Atualizacao FinanIA"
 
 echo.
 echo [3/3] Forcando push para GitHub...
