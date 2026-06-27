@@ -4,6 +4,9 @@ REM Uso: PUSH_MAIN.bat "mensagem do commit"
 
 cd /d "%~dp0"
 
+REM Remove arquivos rastreados fora desta pasta
+git reset HEAD .. 2>nul
+
 echo.
 echo ============================================
 echo   Banner-Maker - PUSH MAIN
@@ -27,9 +30,9 @@ git status --short
 
 echo.
 
-REM Git add
+REM Git add - APENAS arquivos da pasta atual
 echo [2/4] Adicionando arquivos...
-git add -A
+git add *.html *.js *.json *.md *.bat .env .env.example .gitignore css/ js/
 
 REM Git commit
 echo [3/4] Criando commit...
