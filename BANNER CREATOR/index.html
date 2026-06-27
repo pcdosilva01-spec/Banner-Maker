@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerador de Banners para E-commerce - Crie banners profissionais automaticamente com IA">
+    <title>E-Commerce Banner Generator | Banners Profissionais com IA</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Montserrat:ital,wght@0,400;0;500;0;600;0;700;0;800;1,400&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- API Key Injection -->
+    <script>
+        // NVIDIA API Key loaded from .env configuration
+        window.NVIDIA_API_KEY = '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';
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Controls -->
+        <aside class="sidebar" role="complementary" aria-label="Painel de controles">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="40" height="40" rx="8" fill="url(#logo-gradient)"/>
+                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop stop-color="#7C3AED"/>
+                                <stop offset="1" stop-color="#4F46E5"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="logo-text">
+                        <h1>Banner AI</h1>
+                        <span>E-Commerce Generator</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" role="navigation">
+                <!-- Section: Category Info -->
+                <section class="control-section" aria-labelledby="category-section">
+                    <h2 id="category-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M7 7h10v10H7z"/><path d="M7 17V7m10 10V7"/>
+                        </svg>
+                        Categoria
+                    </h2>
+                    <div class="control-group">
+                        <label for="category-name" class="control-label">Nome da Categoria</label>
+                        <input
+                            type="text"
+                            id="category-name"
+                            class="control-input"
+                            placeholder="Ex: Peças de Cima, Vestidos, Jeans..."
+                            value="Peças de Cima"
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div class="control-group">
+                        <label for="category-subtitle" class="control-label">Subtítulo (Opcional)</label>
+                        <input
+                            type="text"
+                            id="category-subtitle"
+                            class="control-input"
+                            placeholder="Ex: Nova Coleção, Lançamentos..."
+                            value="Compre agora >"
+                            autocomplete="off"
+                        >
+                    </div>
+                </section>
+
+                <!-- Section: Image Upload -->
+                <section class="control-section" aria-labelledby="image-section">
+                    <h2 id="image-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+                        </svg>
+                        Imagem
+                    </h2>
+                    <div class="control-group">
+                        <label for="image-upload" class="image-upload-label">
+                            <div class="upload-area" id="upload-area">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                <span class="upload-text">Clique ou arraste a imagem</span>
+                                <span class="upload-hint">PNG, JPG até 10MB</span>
+                            </div>
+                            <input type="file" id="image-upload" class="visually-hidden" accept="image/png,image/jpeg,image/jpg" aria-describedby="upload-hint">
+                        </label>
+                        <div class="image-preview-container" id="image-preview-container" style="display: none;">
+                            <img id="image-preview" src="" alt="Preview da imagem carregada" class="image-preview">
+                            <button type="button" class="btn-remove-image" id="btn-remove-image" aria-label="Remover imagem">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: AI Controls -->
+                <section class="control-section" aria-labelledby="ai-section">
+                    <h2 id="ai-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                        </svg>
+                        Inteligência Artificial
+                    </h2>
+                    <div class="control-group">
+                        <label for="color-preference" class="control-label">Cor Principal (Opcional)</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="color-preference" class="color-picker" value="#7C3AED">
+                            <button type="button" class="btn-auto-color" id="btn-auto-color" title="Deixar IA escolher">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                                </svg>
+                                Auto
+                            </button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <button type="button" class="btn-ai-generate" id="btn-generate-ai">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                            </svg>
+                            Gerar com IA
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section: Layout Controls -->
+                <section class="control-section" aria-labelledby="layout-section">
+                    <h2 id="layout-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                        Layout
+                    </h2>
+
+                    <div class="control-group">
+                        <label for="border-thickness" class="control-label">
+                            Espessura da Moldura
+                            <span class="control-value" id="border-thickness-value">0px</span>
+                        </label>
+                        <input type="range" id="border-thickness" class="control-range" min="0" max="40" value="0">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="border-radius" class="control-label">
+                            Raio da Borda
+                            <span class="control-value" id="border-radius-value">0px</span>
+                        </label>
+                        <input type="range" id="border-radius" class="control-range" min="0" max="100" value="0">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="bottom-band-height" class="control-label">
+                            Altura da Faixa Inferior
+                            <span class="control-value" id="bottom-band-height-value">300px</span>
+                        </label>
+                        <input type="range" id="bottom-band-height" class="control-range" min="150" max="500" value="300">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="image-scale" class="control-label">
+                            Escala da Imagem
+                            <span class="control-value" id="image-scale-value">100%</span>
+                        </label>
+                        <input type="range" id="image-scale" class="control-range" min="50" max="200" value="100">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="image-position-x" class="control-label">
+                            Posição X
+                            <span class="control-value" id="image-position-x-value">0%</span>
+                        </label>
+                        <input type="range" id="image-position-x" class="control-range" min="-50" max="50" value="0">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="image-position-y" class="control-label">
+                            Posição Y
+                            <span class="control-value" id="image-position-y-value">0%</span>
+                        </label>
+                        <input type="range" id="image-position-y" class="control-range" min="-50" max="50" value="0">
+                    </div>
+                </section>
+
+                <!-- Section: Typography -->
+                <section class="control-section" aria-labelledby="typography-section">
+                    <h2 id="typography-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <polyline points="4,7 4,4 20,4 20,7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>
+                        </svg>
+                        Tipografia
+                    </h2>
+
+                    <div class="control-group">
+                        <label for="font-family" class="control-label">Fonte</label>
+                        <select id="font-family" class="control-select">
+                            <option value="Poppins">Poppins</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Outfit">Outfit</option>
+                            <option value="DM Sans">DM Sans</option>
+                            <option value="Manrope">Manrope</option>
+                            <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="title-size" class="control-label">
+                            Tamanho do Título
+                            <span class="control-value" id="title-size-value">72px</span>
+                        </label>
+                        <input type="range" id="title-size" class="control-range" min="32" max="120" value="72">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="subtitle-size" class="control-label">
+                            Tamanho do Subtítulo
+                            <span class="control-value" id="subtitle-size-value">24px</span>
+                        </label>
+                        <input type="range" id="subtitle-size" class="control-range" min="14" max="48" value="24">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="title-weight" class="control-label">Peso da Fonte</label>
+                        <select id="title-weight" class="control-select">
+                            <option value="400">Regular (400)</option>
+                            <option value="500">Medium (500)</option>
+                            <option value="600" selected>SemiBold (600)</option>
+                            <option value="700">Bold (700)</option>
+                            <option value="800">ExtraBold (800)</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- Section: Colors -->
+                <section class="control-section" aria-labelledby="colors-section">
+                    <h2 id="colors-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/>
+                        </svg>
+                        Cores
+                    </h2>
+
+                    <div class="control-group">
+                        <label for="background-color" class="control-label">Cor de Fundo</label>
+                        <input type="color" id="background-color" class="color-picker-full" value="#F5F5F5">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="band-color" class="control-label">Cor da Faixa Inferior</label>
+                        <input type="color" id="band-color" class="color-picker-full" value="#1A1A1A">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="title-color" class="control-label">Cor do Título</label>
+                        <input type="color" id="title-color" class="color-picker-full" value="#FFFFFF">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="subtitle-color" class="control-label">Cor do Subtítulo</label>
+                        <input type="color" id="subtitle-color" class="color-picker-full" value="#CCCCCC">
+                    </div>
+                </section>
+
+                <!-- Section: Effects -->
+                <section class="control-section" aria-labelledby="effects-section">
+                    <h2 id="effects-section" class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Efeitos
+                    </h2>
+
+                    <div class="control-group">
+                        <label for="shadow-opacity" class="control-label">
+                            Opacidade da Sombra
+                            <span class="control-value" id="shadow-opacity-value">0%</span>
+                        </label>
+                        <input type="range" id="shadow-opacity" class="control-range" min="0" max="100" value="0">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="image-opacity" class="control-label">
+                            Opacidade da Imagem
+                            <span class="control-value" id="image-opacity-value">100%</span>
+                        </label>
+                        <input type="range" id="image-opacity" class="control-range" min="0" max="100" value="100">
+                    </div>
+                </section>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="sidebar-actions">
+                <button type="button" class="btn btn-primary btn-generate" id="btn-generate">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                    </svg>
+                    Gerar Banner
+                </button>
+                <button type="button" class="btn btn-secondary btn-regenerate" id="btn-regenerate">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Gerar Novamente
+                </button>
+                <button type="button" class="btn btn-outline btn-reset" id="btn-reset">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+                    </svg>
+                    Resetar
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content" role="main">
+            <!-- Toolbar -->
+            <div class="toolbar" role="toolbar" aria-label="Ferramentas de exportação">
+                <div class="toolbar-title">
+                    <h2>Preview do Banner</h2>
+                    <span class="badge">1400 x 1400 px</span>
+                </div>
+                <div class="toolbar-actions">
+                    <button type="button" class="btn btn-export btn-export-png" id="btn-export-png" title="Exportar como PNG">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Exportar PNG
+                    </button>
+                    <button type="button" class="btn btn-export btn-export-jpg" id="btn-export-jpg" title="Exportar como JPG">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Exportar JPG
+                    </button>
+                </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="canvas-container">
+                <canvas
+                    id="banner-canvas"
+                    width="1400"
+                    height="1400"
+                    aria-label="Preview do banner de e-commerce"
+                    role="img"
+                ></canvas>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="info-panel" id="info-panel">
+                <div class="info-header">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <span class="info-text">Banner gerado automaticamente</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" aria-live="polite" aria-busy="false" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Gerando banner com IA...</p>
+            <p class="loading-subtext">Aguarde enquanto criamos seu banner profissional</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container" role="alert" aria-live="assertive"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
